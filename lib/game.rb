@@ -52,11 +52,9 @@ class Game
         if position == player.player_symbol
           streak += 1
           
-          i = 1
-          while i < 4 do
+          for i in 1..3 do
             if @board[column_counter + i][position_counter] == player.player_symbol
               streak += 1
-              i += 1
             else
               streak = 0
               break

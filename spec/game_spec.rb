@@ -55,6 +55,12 @@ describe Game do
     end
 
     describe '#has_won_horizontally?' do
+      it "doesn't always return true" do
+        game = Game.new(player1, player2)
+        game.board = [['X', 'X', 2, 3, 4, 5], [0, 'X', 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ['X', 1, 2, 3, 4, 5], [0, 1, "O", 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]
+        expect(game.has_won_horizontally?(player2)).to eql(false)
+      end
+
       it "checks if the player has won horizontally" do
         game = Game.new(player1, player2)
         game.board = [['X', 'X', 2, 3, 4, 5], [0, 'X', 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], [0, 1, "O", 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]
