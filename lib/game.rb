@@ -23,9 +23,12 @@ class Game
 
   def has_won_vertically?(player)
     streak = 0
+    stop_column = false
     @board.each do |column|
+        
       column.each do |position|
         if streak == 4
+          stop_column = true
           break
         end
 
@@ -35,6 +38,8 @@ class Game
           streak = 0
         end
       end
+      break if streak == 4
+      streak = 0 
     end
     streak == 4 ? true : false
   end
@@ -45,21 +50,20 @@ class Game
     @board.each do |column|
       position_counter = 0
       column.each do |position|
-        if streak == 4
-          break
-        end
+        break if streak == 4
 
         if position == player.player_symbol
-          streak += 1
-          
+          streak += 1   
           for i in 1..3 do
-            if @board[column_counter + i][position_counter] == player.player_symbol
+            if (column_counter + i) > 6
+              streak = 0
+              break
+            elsif @board[column_counter + i][position_counter] == player.player_symbol
               streak += 1
             else
               streak = 0
               break
             end
-
           end
         else
           streak = 0
@@ -70,9 +74,39 @@ class Game
 
       column_counter += 1
     end
-
-    puts streak
     streak == 4 ? true : false
   end
 
+  def has_won_diagonally?(player)
+    streak = 0
+    column_counter = 0
+    @board.each do |column|
+      position_counter = 0
+      column.each do |position|
+        break if streak == 4
+
+        if position == player.player_symbol
+          streak += 1   
+          for i in 1..3 do
+            if (column_counter + i) > 6 && (position_counter + i > 5)
+              streak = 0
+              break
+
+            elsif @board[column_counter + i][position_counter + i] == player.player_symbol
+              streak += 1
+            else
+              streak = 0
+              break
+            end
+          end       
+        else
+          streak = 0
+        end
+        position_counter += 1
+      end
+
+      column_counter += 1
+    end
+    streak == 4 ? true : false
+  end
 end
