@@ -1,13 +1,14 @@
 require './lib/game.rb'
 require './lib/player.rb'
+require 'colorize'
 
 player1 = Player.new("X")
 player2 = Player.new("O")
 
 describe Game do
-  it "creates a grid of dimensions 7x6" do   
+  it "creates a grid of dimensions 8x6" do   
     game = Game.new(player1, player2)
-    expect(game.board).to eql([[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]])
+    expect(game.board).to eql([[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]])
   end
 
   it "accepts two players" do
@@ -18,7 +19,7 @@ describe Game do
     it "lets the player play a turn" do 
       game = Game.new(player1, player2)
       game.player_turn(0, player1)
-      expect(game.board).to eql([["X", 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]])
+      expect(game.board).to eql([["X", 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]])
     end
 
     it "stacks players turns on top of another" do
@@ -29,7 +30,7 @@ describe Game do
       3.times do
         game.player_turn(0, player1)
       end
-      expect(game.board).to eql([['X', 'X', 'X', 3, 4, 5], ['X', 'X', 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]])
+      expect(game.board).to eql([['X', 'X', 'X', 3, 4, 5], ['X', 'X', 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]])
     end
   end
 
@@ -92,6 +93,48 @@ describe Game do
       game = Game.new(player1, player2)
       game.board = [["O", 'X', 2, 3, 4, 5], [0, 'X', 2, 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ["X", "O", "O", "X", 4, 5], [0, 1, 2, 3, 'X', 'X'], [0, 1, 2, 3, 4, 'X']]
       expect(game.has_won_horizontally?(player1)).to eql(false)
+    end
+  end
+
+  describe '#print_board' do
+    it 'prints the board' do
+      game = Game.new(player1, player2)
+      game.print_board
+    end
+
+    it 'prints the board with the game on' do
+      game = Game.new(player1, player2)
+      game.board = [["O", 'X', 2, 3, 4, 5], [0, 'X', 2, 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ["X", "O", "O", "X", 4, 5], [0, 1, 2, 3, 'X', 'X'], [0, 1, 2, 3, 4, 'X']]
+      game.print_board
+    end
+  end
+
+  describe '#has_won' do
+    it 'checks if the player has won' do
+      game = Game.new(player1, player2)
+      game.board = [['X', 1, 2, 3, 4, 5], [0, 'X', 'O', 3, 4, 5], ['X', 'X', 'X', "O", 4, 5], ['X', 'O', 'X', "X", 4, 5], ["O", 'X', "O", 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]
+      expect(game.has_won?(player1)).to eql(true)
+    end
+
+    it "doesn't always return true" do
+      game = Game.new(player1, player2)
+      game.board = [["O", 'X', 2, 3, 4, 5], [0, 'X', 2, 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ["X", "O", "O", "X", 4, 5], [0, 1, 2, 3, 'X', 'X'], [0, 1, 2, 3, 4, 'X']]
+      expect(game.has_won?(player1)).to eql(false)
+    end
+
+
+  end
+
+
+  describe '#tie?' do
+    it 'checks if its a tie' do
+      game = Game.new(player1, player2)
+      game.available_moves = Array.new(7) { Array.new(6, false) }
+      expect(game.tie?).to eql(true)
+    end
+    it "doesn't always return true" do
+      game = Game.new(player1, player2)
+      expect(game.tie?).to eql(false)
     end
   end
 end 
