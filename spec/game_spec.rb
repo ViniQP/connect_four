@@ -121,10 +121,7 @@ describe Game do
       game.board = [["O", 'X', 2, 3, 4, 5], [0, 'X', 2, 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ['X', 1, 'O', 3, 4, 5], ["X", "O", "O", "X", 4, 5], [0, 1, 2, 3, 'X', 'X'], [0, 1, 2, 3, 4, 'X']]
       expect(game.has_won?(player1)).to eql(false)
     end
-
-
   end
-
 
   describe '#tie?' do
     it 'checks if its a tie' do
